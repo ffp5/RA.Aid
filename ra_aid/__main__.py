@@ -200,6 +200,7 @@ def launch_server(host: str, port: int, args):
             "openrouter",
             "openai-compatible",
             "deepseek",
+            "makehub",
         ],
     )
 
@@ -1249,6 +1250,7 @@ def main():
                         "openrouter",
                         "openai-compatible",
                         "deepseek",
+                        "makehub",
                     ],
                 )
 

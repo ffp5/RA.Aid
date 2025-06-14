@@ -488,6 +488,38 @@ class BedrockStrategy(ProviderStrategy):
         return ValidationResult(valid=len(missing) == 0, missing_vars=missing)
 
 
+class MakehubStrategy(ProviderStrategy):
+    """Makehub provider validation strategy."""
+
+    def validate(self, args: Optional[Any] = None) -> ValidationResult:
+        """Validate Makehub environment variables."""
+        missing = []
+
+        # Check if we're validating expert config
+        if (
+            args
+            and hasattr(args, "expert_provider")
+            and args.expert_provider == "makehub"
+        ):
+            key = os.environ.get("EXPERT_MAKEHUB_API_KEY")
+            if not key or key == "":
+                # Try to copy from base if not set
+                base_key = os.environ.get("MAKEHUB_API_KEY")
+                if base_key:
+                    os.environ["EXPERT_MAKEHUB_API_KEY"] = base_key
+                    key = base_key
+            if not key:
+                missing.append(
+                    "EXPERT_MAKEHUB_API_KEY environment variable is not set"
+                )
+        else:
+            key = os.environ.get("MAKEHUB_API_KEY")
+            if not key:
+                missing.append("MAKEHUB_API_KEY environment variable is not set")
+
+        return ValidationResult(valid=len(missing) == 0, missing_vars=missing)
+
+
 class ProviderFactory:
     """Factory for creating provider validation strategies."""
 
@@ -513,6 +545,7 @@ class ProviderFactory:
             "fireworks": FireworksStrategy(),
             "groq": GroqStrategy(),
             "bedrock": BedrockStrategy(),
+            "makehub": MakehubStrategy(),
         }
         strategy = strategies.get(provider)
         return strategy

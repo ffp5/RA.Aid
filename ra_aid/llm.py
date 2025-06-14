@@ -75,6 +75,7 @@ known_temp_providers = {
     "fireworks",
     "groq",
     "bedrock",
+    "makehub",
 }
 
 # Constants for API request configuration
@@ -297,6 +298,43 @@ def create_ollama_client(
         **temp_kwargs,
     )
 
+def create_makehub_client(
+    model_name: str,
+    api_key: str,
+    temperature: Optional[float] = None,
+    is_expert: bool = False,
+) -> BaseChatModel:
+    """Create Makehub client with appropriate configuration."""
+    default_headers = {"HTTP-Referer": "https://ra-aid.ai", "X-Title": "RA.Aid"}
+    base_url = "https://api.makehub.ai/v1"
+
+    # Set temperature based on expert mode and provided value
+    temp_value = 0 if is_expert else (temperature if temperature is not None else 1)
+
+    # Common parameters for Makehub clients
+    common_params = {
+        "api_key": api_key,
+        "base_url": base_url,
+        "model": model_name,
+        "timeout": int(
+            get_env_var(name="LLM_REQUEST_TIMEOUT", default=LLM_REQUEST_TIMEOUT)
+        ),
+        "max_retries": int(
+            get_env_var(name="LLM_MAX_RETRIES", default=LLM_MAX_RETRIES)
+        ),
+        "default_headers": default_headers,
+        "metadata": {
+            "model_name": model_name,
+            "provider": "makehub"
+        }
+    }
+
+    return ChatOpenAI(
+        **common_params,
+        **({"temperature": temperature} if temperature is not None else {}),
+    )
+
+
 def create_bedrock_client(
     model_name: str,
     aws_profile: Optional[str] = None,
@@ -400,7 +438,11 @@ def get_provider_config(provider: str, is_expert: bool = False) -> Dict[str, Any
             "aws_session_token": get_env_var("AWS_SESSION_TOKEN", is_expert),
             "region_name": get_env_var("AWS_REGION_NAME", is_expert, "us-east-1"),
             "base_url": None,
-        }
+        },
+        "makehub": {
+            "api_key": get_env_var("MAKEHUB_API_KEY", is_expert),
+            "base_url": "https://api.makehub.ai/v1",
+        },
     }
     config = configs.get(provider, {})
     if not config:
@@ -697,6 +739,13 @@ def create_llm_client(
             temperature=temperature if temp_kwargs else None,
             is_expert=is_expert,
         )
+    elif provider == "makehub":
+        return create_makehub_client(
+            model_name=model_name,
+            api_key=config.get("api_key"),
+            temperature=temperature if temp_kwargs else None,
+            is_expert=is_expert,
+        )
     else:
         raise ValueError(f"Unsupported provider: {provider}")
 
@@ -726,6 +775,7 @@ def validate_provider_env(provider: str) -> bool:
         "fireworks": "FIREWORKS_API_KEY",
         "groq": "GROQ_API_KEY",
         "bedrock": None,  # Bedrock requires AWS_PROFILE or AWS_ACCESS_KEY_ID
+        "makehub": "MAKEHUB_API_KEY",
     }
 
     key = required_vars.get(provider.lower())
