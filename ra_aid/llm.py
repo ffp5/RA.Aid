@@ -303,9 +303,15 @@ def create_makehub_client(
     api_key: str,
     temperature: Optional[float] = None,
     is_expert: bool = False,
+    price_performance_ratio: Optional[float] = None,
 ) -> BaseChatModel:
     """Create Makehub client with appropriate configuration."""
     default_headers = {"HTTP-Referer": "https://ra-aid.ai", "X-Title": "RA.Aid"}
+    
+    # Add price-performance ratio header if provided
+    if price_performance_ratio is not None:
+        default_headers["X-Price-Performance-Ratio"] = str(price_performance_ratio)
+    
     base_url = "https://api.makehub.ai/v1"
 
     # Set temperature based on expert mode and provided value
@@ -740,11 +746,16 @@ def create_llm_client(
             is_expert=is_expert,
         )
     elif provider == "makehub":
+        # Get price-performance ratio from config repository
+        config_repo = get_config_repository()
+        price_performance_ratio = config_repo.get("price_performance_ratio")
+        
         return create_makehub_client(
             model_name=model_name,
             api_key=config.get("api_key"),
             temperature=temperature if temp_kwargs else None,
             is_expert=is_expert,
+            price_performance_ratio=price_performance_ratio,
         )
     else:
         raise ValueError(f"Unsupported provider: {provider}")
