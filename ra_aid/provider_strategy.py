@@ -503,14 +503,14 @@ class MakehubStrategy(ProviderStrategy):
         ):
             key = os.environ.get("EXPERT_MAKEHUB_API_KEY")
             if not key or key == "":
-                # Try to copy from base if not set
+                # Automatically copy from base if not set (since Makehub uses one API key)
                 base_key = os.environ.get("MAKEHUB_API_KEY")
                 if base_key:
                     os.environ["EXPERT_MAKEHUB_API_KEY"] = base_key
                     key = base_key
             if not key:
                 missing.append(
-                    "EXPERT_MAKEHUB_API_KEY environment variable is not set"
+                    "MAKEHUB_API_KEY environment variable is not set (needed for expert mode)"
                 )
         else:
             key = os.environ.get("MAKEHUB_API_KEY")
