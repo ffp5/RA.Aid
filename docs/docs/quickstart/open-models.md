@@ -111,11 +111,13 @@ ra-aid -m "Your task" --provider makehub --model anthropic/claude-4-sonnet --tem
 
 **Available Models:**
 - `anthropic/claude-4-sonnet`: Latest Claude model optimized for coding tasks
+
 - `qwen/Qwen2.5-Coder-32B`: Specialized for code generation and development
 - `deepseek/deepseek-V3-0324-fp8`: High-performance reasoning model for complex problems
 - `mistral/mistral-small-24B-fp16`: Efficient model for rapid development workflows
 - `google/gemini-2.5-pro-preview`: Google's latest multimodal model with coding capabilities
--look at 'https://makehub.ai/models' for more models
+- look at 'https://makehub.ai/models' for more models
+
 
 **Configuration Options:**
 - Supports temperature control and all standard OpenAI parameters
