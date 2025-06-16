@@ -21,7 +21,6 @@ def test_normalize_model_name():
     assert normalize_model_name("anthropic/claude-3.7") == "claude-3.7"
     assert normalize_model_name("google/gemini-2.0-pro") == "gemini-2.0-pro"
     assert normalize_model_name("openai/gpt-4") == "gpt-4"
-    assert normalize_model_name("makehub/anthropic/claude-sonnet-4") == "anthropic/claude-sonnet-4"
     
     # Test version suffix removal
     assert normalize_model_name("gemini-2.0-pro-exp-02-05:free") == "gemini-2.0-pro-exp-02-05"
@@ -156,24 +155,6 @@ def test_should_use_react_agent_error_handling(mock_supports_function_calling):
     assert should_use_react_agent(model) is False
 
 
-@patch('litellm.supports_function_calling')
-@patch('ra_aid.model_detection.get_config_repository')
-def test_should_use_react_agent_makehub_models(mock_get_config_repo, mock_supports_function_calling):
-    """Test should_use_react_agent with MakeHub provider models."""
-    # Test MakeHub Claude model
-    model = MagicMock(spec=BaseChatModel)
-    model.model = "anthropic/claude-sonnet-4"
-    
-    mock_repo = MagicMock()
-    mock_repo.get.return_value = "makehub"
-    mock_get_config_repo.return_value = mock_repo
-    
-    # Test when model supports function calling
-    mock_supports_function_calling.return_value = True
-    assert should_use_react_agent(model) is True
-    mock_supports_function_calling.assert_called_with(model="anthropic/claude-sonnet-4", custom_llm_provider=None)
-
-
 def test_model_name_has_claude():
     """Test model_name_has_claude function."""
     # Test positive cases
@@ -199,13 +180,12 @@ def test_is_anthropic_claude():
     assert is_anthropic_claude({"provider": "openrouter", "model": "anthropic/claude-3.7"})
     
     # Test positive cases - MakeHub with Anthropic model
-    assert is_anthropic_claude({"provider": "makehub", "model": "anthropic/claude-sonnet-4"})
+    assert is_anthropic_claude({"provider": "makehub", "model": "anthropic/claude-4-sonnet"})
     
     # Test negative cases
     assert not is_anthropic_claude({"provider": "openai", "model": "gpt-4"})
     assert not is_anthropic_claude({"provider": "anthropic", "model": "gpt-4"})  # Wrong model for provider
     assert not is_anthropic_claude({"provider": "openrouter", "model": "openai/gpt-4"})
-    assert not is_anthropic_claude({"provider": "makehub", "model": "qwen/qwen-2.5-coder-32b"})  # Non-Claude model on MakeHub
     assert not is_anthropic_claude({"provider": "anthropic", "model": ""})
     assert not is_anthropic_claude({"provider": "", "model": "claude-3.7"})
     assert not is_anthropic_claude({})

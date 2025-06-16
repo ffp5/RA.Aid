@@ -95,12 +95,12 @@ MakeHub is an OpenAI-compatible AI router specifically optimized for developers,
 export MAKEHUB_API_KEY=your_api_key_here
 
 # Basic usage
-ra-aid -m "Your task" --provider makehub --model anthropic/claude-sonnet-4
+ra-aid -m "Your task" --provider makehub --model anthropic/claude-4-sonnet
 ra-aid -m "Your task" --provider makehub --model qwen/qwen-2.5-coder-32b
 ra-aid -m "Your task" --provider makehub --model deepseek/deepseek-V3-0324-fp8
 
 # With temperature control
-ra-aid -m "Your task" --provider makehub --model anthropic/claude-sonnet-4 --temperature 0.3
+ra-aid -m "Your task" --provider makehub --model anthropic/claude-4-sonnet --temperature 0.3
 ```
 
 **Why MakeHub for Developers:**
@@ -110,7 +110,7 @@ ra-aid -m "Your task" --provider makehub --model anthropic/claude-sonnet-4 --tem
 - **OpenAI-Compatible**: Drop-in replacement for OpenAI API calls with familiar interface
 
 **Available Models:**
-- `anthropic/claude-sonnet-4`: Latest Claude model optimized for coding tasks
+- `anthropic/claude-4-sonnet`: Latest Claude model optimized for coding tasks
 - `qwen/qwen-2.5-coder-32b`: Specialized for code generation and development
 - `deepseek/deepseek-V3-0324-fp8`: High-performance reasoning model for complex problems
 - `mistral/mistral-small-24B-fp16`: Efficient model for rapid development workflows

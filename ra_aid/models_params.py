@@ -1410,7 +1410,7 @@ models_params = {
             "latency_coefficient": DEFAULT_BASE_LATENCY,
             "default_backend": AgentBackendType.CIAYN,
         },
-        "anthropic/claude-sonnet-4": {
+        "anthropic/claude-4-sonnet": {
             "token_limit": 200000,
             "supports_temperature": True,
             "default_temperature": DEFAULT_TEMPERATURE,
