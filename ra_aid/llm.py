@@ -337,7 +337,7 @@ def create_makehub_client(
 
     return ChatOpenAI(
         **common_params,
-        **({"temperature": temperature} if temperature is not None else {}),
+        **({"temperature": temp_value} if temp_value is not None else {}),
     )
 
 
