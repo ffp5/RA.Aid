@@ -1378,8 +1378,8 @@ models_params = {
         }
     },
     "makehub": {
-        "qwen/qwen-2.5-coder-32b": {
-            "token_limit": 131072,
+        "qwen/Qwen2.5-Coder-32B": {
+            "token_limit": 32000,
             "default_temperature": 0.4,
             "supports_temperature": True,
             "latency_coefficient": DEFAULT_BASE_LATENCY,

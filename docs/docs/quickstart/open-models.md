@@ -96,7 +96,7 @@ export MAKEHUB_API_KEY=your_api_key_here
 
 # Basic usage
 ra-aid -m "Your task" --provider makehub --model anthropic/claude-4-sonnet
-ra-aid -m "Your task" --provider makehub --model qwen/qwen-2.5-coder-32b
+ra-aid -m "Your task" --provider makehub --model qwen/Qwen2.5-Coder-32B
 ra-aid -m "Your task" --provider makehub --model deepseek/deepseek-V3-0324-fp8
 
 # With temperature control
@@ -111,10 +111,11 @@ ra-aid -m "Your task" --provider makehub --model anthropic/claude-4-sonnet --tem
 
 **Available Models:**
 - `anthropic/claude-4-sonnet`: Latest Claude model optimized for coding tasks
-- `qwen/qwen-2.5-coder-32b`: Specialized for code generation and development
+- `qwen/Qwen2.5-Coder-32B`: Specialized for code generation and development
 - `deepseek/deepseek-V3-0324-fp8`: High-performance reasoning model for complex problems
 - `mistral/mistral-small-24B-fp16`: Efficient model for rapid development workflows
 - `google/gemini-2.5-pro-preview`: Google's latest multimodal model with coding capabilities
+-look at 'https://makehub.ai/models' for more models
 
 **Configuration Options:**
 - Supports temperature control and all standard OpenAI parameters
